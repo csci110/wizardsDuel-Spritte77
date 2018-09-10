@@ -26,7 +26,7 @@ class PlayerWizard extends Sprite {
         this.angle = 90;
     }
     handleGameLoop() { //Keep marcus in display area
-        this.y = Math.max(0, this.y);
+        this.y = Math.max(5, this.y);
         this.y = Math.min(game.displayHeight - this.height, this.y);
         this.speed = 0;
     }
@@ -55,6 +55,11 @@ class Spell extends Sprite {
         //delete spell when it moves off screen
         game.removeSprite(this);
     }
+    handleCollision(otherSprite) {
+        game.removeSprite(this);
+        new Fireball(otherSprite);
+        return false;
+    }
 }
 
 class NonPlayerWizard extends Sprite {
@@ -72,5 +77,40 @@ class NonPlayerWizard extends Sprite {
         this.defineAnimation("up", 0, 2);
         this.defineAnimation("left", 10, 12);
     }
+    handleGameLoop() {
+        if (this.y <= 0) {
+            //turn down
+            this.y = 0;
+            this.angle = 270;
+            this.playAnimation("down");
+    }
+        if (this.y >= game.displayHeight - this.height) {
+            //turn up
+            this.y = game.displayHeight - this.height;
+            this.angle = 90;
+            this.playAnimation("up");
+    }
+    }
+    handleAnimationEnd() {
+        if (this.angle == 90) {
+            this.playAnimation("up");
+        }
+        if (this.angle == 270) {
+            this.playAnimation("down");
+        }
+    }
 }
-    let stanger = new NonPlayerWizard();
+let stranger = new NonPlayerWizard();
+
+class Fireball extends Sprite {
+    constructor(deadSprite) {
+        super();
+        this.x = deadSprite.x;
+        this.y = deadSprite.y;
+        this.setImage("fireballSheet.png");
+        this.name = "A ball of fire";
+        game.removeSprite(deadSprite);
+        this.defineAnimation("explode", 0, 15);
+        this.playAnimation("explode");
+    }
+}
