@@ -14,6 +14,8 @@ class PlayerWizard extends Sprite {
         this.x = this.width;
         this.y = this.height;
         this.speedWhenWalking = 100;
+        this.spellCastTime = 0;
+        
     }
     handleDownArrowKey() {
         this.playAnimation("down");
@@ -31,13 +33,17 @@ class PlayerWizard extends Sprite {
         this.speed = 0;
     }
     handleSpacebar() {
-        let spell = new Spell();
-        spell.name = "A spell cast by Marcus";
-        spell.setImage("marcusSpellSheet.png");
-        spell.x = this.width; //this sets the position of the spell object to equal to (also need to fix this)
-        spell.y = this.y; //the position of any object in the player wizard class
-        spell.angle = 0;
-        this.playAnimation("right");
+        let now = game.getTime(); 
+        if (now - this.spellCastTime >= 2) {
+            this.spellCastTime = now;
+            let spell = new Spell();
+            spell.name = "A spell cast by Marcus";
+            spell.setImage("marcusSpellSheet.png");
+            spell.x = this.x + this.width; //this sets the position of the spell object to equal to the right of wizard
+            spell.y = this.y; //the position of any object in the player wizard class
+            spell.angle = 0;
+            this.playAnimation("right");
+        }
     }
 }
     let Marcus = new PlayerWizard();
@@ -56,10 +62,16 @@ class Spell extends Sprite {
         game.removeSprite(this);
     }
     handleCollision(otherSprite) {
-        game.removeSprite(this);
-        new Fireball(otherSprite);
-        return false;
-    }
+      if (this.getImage() !== otherSprite.getImage()) {
+      // Adjust mostly blank spell image to vertical center.
+      let verticalOffset = Math.abs(this.y - otherSprite.y);
+      if (verticalOffset < this.height / 2) {
+          game.removeSprite(this);
+          new Fireball(otherSprite);
+      }
+  }
+  return false;
+}
 }
 
 class NonPlayerWizard extends Sprite {
@@ -90,6 +102,20 @@ class NonPlayerWizard extends Sprite {
             this.angle = 90;
             this.playAnimation("up");
     }
+    if (Math.random() < 0.01) {
+        let strangerspell = new Spell();
+        //Create a spell object 48 pixels to the left of this object
+        strangerspell.x = this.x - this.width;
+        strangerspell.y = this.y; 
+        // Make it go left, give it a name and an image
+        strangerspell.angle = 180;
+        strangerspell.name = "A scary spell";
+        strangerspell.setImage("strangerSpellSheet.png");
+        strangerspell.defineAnimation("scary", 0, 1);
+        strangerspell.playAnimation("scary");
+        //Play the left animation
+        this.playAnimation("left");
+    }
     }
     handleAnimationEnd() {
         if (this.angle == 90) {
@@ -112,5 +138,17 @@ class Fireball extends Sprite {
         game.removeSprite(deadSprite);
         this.defineAnimation("explode", 0, 15);
         this.playAnimation("explode");
+    }
+    handleAnimationEnd() {
+        game.removeSprite(this);
+        if (!game.isActiveSprite(stranger)) {
+            game.end("Congratulations!\n\nMarcus has defeated the mysterious"
+            + "\nstranger in the dark cloak!");
+        }
+        if (!game.isActiveSprite(Marcus)) {
+            game.end("Marcus is defeated by the mysterious"
+            + "\nstranger in the dark cloak!"
+            + "\n\nBetter luck next time.");
+        }
     }
 }
