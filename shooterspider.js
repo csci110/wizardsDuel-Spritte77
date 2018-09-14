@@ -32,7 +32,7 @@ bottomWall.height = 48;
 bottomWall.setImage("weirdspiderwallhorizontal.png");
 bottomWall.x = 0;
 bottomWall.y = (leftWall.height + leftWall.width);
-bottomWall.accelerateOnBounce = false;
+bottomWall.accelerateOnBounce = false;//These walls are so IntruderSpider doesnt go off the screen
 
 class PlayerSpider extends  Sprite() {
     constructor() {
@@ -157,4 +157,6 @@ class deadWeb extends Sprite {
     }
 }
 
-//I can't get my sprites to show up
+//I can't get my sprites to show up I have tried Ctrl shift j and it doesn't
+//make sense to me I try to fix the issue it states then another issue pops 
+//up with the constructor not allowing it.
