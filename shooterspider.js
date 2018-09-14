@@ -1,17 +1,12 @@
 import {game, Sprite} from "./sgc/sgc.js";
 
-game.preloadImage("Spider1.png", 40, 40);
-game.preloadImage("spiderbackground.png");
-game.preloadImage("Spider2.png", 40, 40);
-game.preloadImage("Web Slinging.png");
-game.preloadImage("Weird Spider Wall Horizontal.png");
-game.preloadImage("Weird Spider Wall Vertical.png");
 game.setBackground("spiderbackground.png");
+
 
 let topWall = new Sprite ();
 topWall.width = 800;
 topWall.height = 48;
-topWall.setImage("Weird Spider Wall Horizontal.png");
+topWall.setImage("weirdspiderwallhorizontal.png");
 topWall.x = 0;
 topWall.y = 0;
 topWall.accelerateOnBounce = false;
@@ -19,7 +14,7 @@ topWall.accelerateOnBounce = false;
 let leftWall = new Sprite ();
 leftWall.width = 48;
 leftWall.height = 504;
-leftWall.setImage("Weird Spider Wall Vertical.png");
+leftWall.setImage("weirdspiderwallvertical.png");
 leftWall.x = 0;
 leftWall.y = topWall.height;
 leftWall.accelerateOnBounce = false;
@@ -27,7 +22,7 @@ leftWall.accelerateOnBounce = false;
 let rightWall = new Sprite ();
 rightWall.width = 48;
 rightWall.height = 504;
-rightWall.setImage("Weird Spider Wall Vertical.png");
+rightWall.setImage("weirdspiderwallvertical.png");
 rightWall.x = (topWall.width - leftWall.width);
 rightWall.y = topWall.height;
 rightWall.accelerateOnBounce = false;
@@ -35,13 +30,13 @@ rightWall.accelerateOnBounce = false;
 let bottomWall = new Sprite ();
 bottomWall.width = 800;
 bottomWall.height = 48;
-bottomWall.setImage("Weird Spider Wall Horizontal.png");
+bottomWall.setImage("weirdspiderwallhorizontal.png");
 bottomWall.x = 0;
 bottomWall.y = (leftWall.height + leftWall.width);
 bottomWall.accelerateOnBounce = false;
 
 
-class PlayerSpider extends new Sprite() {
+class PlayerSpider extends Sprite() {
     constructor() {
         super();
         this.name = "Spudz";
@@ -80,7 +75,7 @@ class PlayerSpider extends new Sprite() {
             this.webShooterTime = now;
             let web = new Web();
             web.name = "A spiders web";
-            web.setImage("Web Slinging.png");
+            web.setImage("webslinging.png");
             web.x = this.x;
             web.y = this.y;
             web.angle = 270;
@@ -88,7 +83,7 @@ class PlayerSpider extends new Sprite() {
     }
 }
 
-let Spudz = new PlayerSpider();
+    let Spudz = new PlayerSpider();
 
 class Web extends Sprite() {
     constructor(){
@@ -119,7 +114,7 @@ class NonPlayerSpider extends Sprite() {
     constructor() {
         super();
         this.name = "Intruder Spider";
-        this.setImage = "Spider2.png";
+        this.setImage = "Spider21.png";
         this.width = 40;
         this.height = 40;
         this.x = game.displayWidth - 2 * 60;
@@ -127,24 +122,26 @@ class NonPlayerSpider extends Sprite() {
         this.angle = Math.random() * (360-0);
         this.speed = 300;
     }
+    handleGameLoop() {
      if (Math.random() < 0.1) {
         let intruderweb = new Web();
         intruderweb.x = this.x;
         intruderweb.y = this.y;
         intruderweb.angle = 270;
         intruderweb.name = "A yucky web";
-        intruderweb.setImage("Web Slinging.p");
+        intruderweb.setImage("webslinging.png");
      }
 }
+}
 
-let IntruderSpider = new NonPlayerSpider();
+    let IntruderSpider = new NonPlayerSpider();
 
 class deadWeb extends Sprite {
     constructor(deadSprite) {
         super();
         this.x = deadSprite.x;
         this.y = deadSprite.y;
-        this.setImage("Web Slinging.png");
+        this.setImage("webslinging.png");
         this.name = "A spiders web";
         game.removeSprite(deadSprite);
     }
