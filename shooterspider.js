@@ -1,5 +1,4 @@
 import {game, Sprite} from "./sgc/sgc.js";
-
 game.setBackground("spiderbackground.png");
 
 
@@ -35,8 +34,7 @@ bottomWall.x = 0;
 bottomWall.y = (leftWall.height + leftWall.width);
 bottomWall.accelerateOnBounce = false;
 
-
-class PlayerSpider extends Sprite() {
+class PlayerSpider extends  Sprite() {
     constructor() {
         super();
         this.name = "Spudz";
@@ -115,8 +113,8 @@ class NonPlayerSpider extends Sprite() {
         super();
         this.name = "Intruder Spider";
         this.setImage = "Spider21.png";
-        this.width = 40;
-        this.height = 40;
+        this.width = 43;
+        this.height = 37;
         this.x = game.displayWidth - 2 * 60;
         this.y = 60;
         this.angle = Math.random() * (360-0);
@@ -158,3 +156,5 @@ class deadWeb extends Sprite {
         }
     }
 }
+
+//I can't get my sprites to show up
