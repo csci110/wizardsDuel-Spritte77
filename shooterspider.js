@@ -1,44 +1,43 @@
-import {game, Sprite} from "./sgc/sgc.js";
+import { game, Sprite } from "./sgc/sgc.js";
 game.setBackground("spiderbackground.png");
 
-
-let topWall = new Sprite ();
-topWall.width = 800;
-topWall.height = 48;
-topWall.setImage("weirdspiderwallhorizontal.png");
+let topWall = new Sprite(); //walls disappear if they get hit by a web I know
+topWall.width = 800; //why it's happening don't know how to make it stop
+topWall.height = 48; //and disapear when hitting a wall and just destroy either 
+topWall.setImage("weirdspiderwallhorizontal1.png"); //spider sprite.
 topWall.x = 0;
 topWall.y = 0;
 topWall.accelerateOnBounce = false;
 
-let leftWall = new Sprite ();
+let leftWall = new Sprite();
 leftWall.width = 48;
 leftWall.height = 504;
-leftWall.setImage("weirdspiderwallvertical.png");
+leftWall.setImage("weirdspiderwallvertical1.png");
 leftWall.x = 0;
 leftWall.y = topWall.height;
 leftWall.accelerateOnBounce = false;
 
-let rightWall = new Sprite ();
+let rightWall = new Sprite();
 rightWall.width = 48;
 rightWall.height = 504;
-rightWall.setImage("weirdspiderwallvertical.png");
+rightWall.setImage("weirdspiderwallvertical1.png");
 rightWall.x = (topWall.width - leftWall.width);
 rightWall.y = topWall.height;
 rightWall.accelerateOnBounce = false;
 
-let bottomWall = new Sprite ();
+let bottomWall = new Sprite();
 bottomWall.width = 800;
 bottomWall.height = 48;
-bottomWall.setImage("weirdspiderwallhorizontal.png");
+bottomWall.setImage("weirdspiderwallhorizontal1.png");
 bottomWall.x = 0;
 bottomWall.y = (leftWall.height + leftWall.width);
-bottomWall.accelerateOnBounce = false;//These walls are so IntruderSpider doesnt go off the screen
+bottomWall.accelerateOnBounce = false; //These walls are so IntruderSpider doesnt go off the screen
 
-class PlayerSpider extends  Sprite() {
+class PlayerSpider extends Sprite {
     constructor() {
         super();
         this.name = "Spudz";
-        this.setImage = "Spider1.png";
+        this.setImage("Spider1.png");
         this.width = 40;
         this.height = 40;
         this.x = 60;
@@ -68,23 +67,23 @@ class PlayerSpider extends  Sprite() {
         this.speed = 0;
     }
     handleSpacebar() {
-        let now = game.getTime(); 
-        if (now - this.webShooterTime >= 2) {
+        let now = game.getTime();
+        if (now - this.webShooterTime >= 1.5) {
             this.webShooterTime = now;
             let web = new Web();
             web.name = "A spiders web";
-            web.setImage("webslinging.png");
+            web.setImage("webslinging1.png");
             web.x = this.x;
-            web.y = this.y;
+            web.y = this.y + 30;
             web.angle = 270;
         }
     }
 }
 
-    let Spudz = new PlayerSpider();
+let Spudz = new PlayerSpider();
 
-class Web extends Sprite() {
-    constructor(){
+class Web extends Sprite {
+    constructor() {
         super();
         this.speed = 200;
         this.height = 40;
@@ -95,44 +94,43 @@ class Web extends Sprite() {
         game.removeSprite(this);
     }
     handleCollision(otherSprite) {
-        if (this.getImage() !== otherSprite.getImage()) {
-      // Adjust mostly blank web image to vertical center.
-      let verticalOffset = Math.abs(this.y - otherSprite.y);
-      if (verticalOffset < this.height / 2) {
-          game.removeSprite(this);
-          new deadWeb(otherSprite);
-      }
-      
+        if (this.getImage() != otherSprite.getImage()) {
+            if (this.getImage() != "weirdspiderwallhorizontal1.png") {
+            // Adjust mostly blank web image to vertical center.
+            let verticalOffset = Math.abs(this.y - otherSprite.y);
+            if (verticalOffset < this.height / 2) {
+                game.removeSprite(this);
+                new deadWeb(otherSprite);
+            }
+        }
     }
     return false;
 }
 }
 
-class NonPlayerSpider extends Sprite() {
+class NonPlayerSpider extends Sprite {
     constructor() {
         super();
         this.name = "Intruder Spider";
-        this.setImage = "Spider21.png";
+        this.setImage("Spider21.png");
         this.width = 43;
         this.height = 37;
         this.x = game.displayWidth - 2 * 60;
         this.y = 60;
-        this.angle = Math.random() * (360-0);
+        this.angle = Math.random() * (360 - 0);
         this.speed = 300;
     }
     handleGameLoop() {
-     if (Math.random() < 0.1) {
-        let intruderweb = new Web();
-        intruderweb.x = this.x;
-        intruderweb.y = this.y;
-        intruderweb.angle = 270;
-        intruderweb.name = "A yucky web";
-        intruderweb.setImage("webslinging.png");
-     }
+        if (Math.random() < 0.01) {
+            let intruderweb = new Web();
+            intruderweb.x = this.x;
+            intruderweb.y = this.y + 30;
+            intruderweb.angle = 270;
+            intruderweb.name = "A yucky web";
+            intruderweb.setImage("webslinging1.png");
+        }
+    }
 }
-}
-
-    let IntruderSpider = new NonPlayerSpider();
 
 class deadWeb extends Sprite {
     constructor(deadSprite) {
@@ -144,19 +142,19 @@ class deadWeb extends Sprite {
         game.removeSprite(deadSprite);
     }
     handleAnimationEnd() {
-        game.removeSprite(this);
+        game.removeSprite(this); //ending isn't happening I don't know why
         if (!game.isActiveSprite(IntruderSpider)) {
-            game.end("Congratulations!\n\nYou have defended your"
-            + "\nweb!");
+            game.end("Congratulations!\n\nYou have defended your" +
+                "\nweb!");
         }
         if (!game.isActiveSprite(Spudz)) {
-            game.end("Your web has been taken"
-            + "\nover!"
-            + "\n\nGood luck with your next web.");
+            game.end("Your web has been taken" +
+                "\nover!" +
+                "\n\nGood luck with your next web.");
         }
     }
 }
 
-//I can't get my sprites to show up I have tried Ctrl shift j and it doesn't
-//make sense to me I try to fix the issue it states then another issue pops 
-//up with the constructor not allowing it.
+
+
+let IntruderSpider = new NonPlayerSpider();
